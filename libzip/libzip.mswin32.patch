@@ -1,0 +1,113 @@
+diff -ru libzip-0.8.orig/lib/mkstemp.c libzip-0.8/lib/mkstemp.c
+--- libzip-0.8.orig/lib/mkstemp.c	2007-05-16 10:41:34.000000000 +0900
++++ libzip-0.8/lib/mkstemp.c	2008-04-22 23:14:12.140625000 +0900
+@@ -43,6 +43,15 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
++#ifdef _WIN32
++#include <io.h>
++#include <process.h>
++#define getpid() _getpid()
++typedef int pid_t;
++#define S_ISDIR(m) (((m) & (_S_IFMT)) == (_S_IFDIR))
++#define open(p, f, m) _open((p), ((f) | _O_BINARY), _S_IREAD | _S_IWRITE)
++#endif
++
+ int
+ _zip_mkstemp(char *path)
+ {
+diff -ru libzip-0.8.orig/lib/zip.h libzip-0.8/lib/zip.h
+--- libzip-0.8.orig/lib/zip.h	2007-06-05 00:21:20.000000000 +0900
++++ libzip-0.8/lib/zip.h	2008-04-22 23:14:12.140625000 +0900
+@@ -46,6 +46,10 @@
+ #include <stdio.h>
+ #include <time.h>
+ 
++#ifdef _WIN32
++typedef int ssize_t;
++#endif
++
+ /* flags for zip_open */
+ 
+ #define ZIP_CREATE           1
+diff -ru libzip-0.8.orig/lib/zip_close.c libzip-0.8/lib/zip_close.c
+--- libzip-0.8.orig/lib/zip_close.c	2007-06-05 00:21:20.000000000 +0900
++++ libzip-0.8/lib/zip_close.c	2008-04-22 23:15:48.203125000 +0900
+@@ -42,6 +42,13 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ 
++#ifdef _WIN32
++#include <windows.h>
++#include <io.h>
++#define close(f) _close(f)
++#define rename(s, d) (MoveFileExA((s), (d), MOVEFILE_REPLACE_EXISTING) ? 0 : -1)
++#endif
++
+ #include "zip.h"
+ #include "zipint.h"
+ 
+@@ -65,7 +72,9 @@
+     int i, j, error;
+     char *temp;
+     FILE *out;
++#ifndef _WIN32
+     mode_t mask;
++#endif
+     struct zip_cdir *cd;
+     struct zip_dirent de;
+     int reopen_on_error;
+@@ -242,9 +251,11 @@
+ 	}
+ 	return -1;
+     }
++#ifndef _WIN32
+     mask = umask(0);
+     umask(mask);
+     chmod(za->zn, 0666&~mask);
++#endif
+ 
+     _zip_free(za);
+     free(temp);
+diff -ru libzip-0.8.orig/lib/zip_error_to_str.c libzip-0.8/lib/zip_error_to_str.c
+--- libzip-0.8.orig/lib/zip_error_to_str.c	2007-05-16 10:41:34.000000000 +0900
++++ libzip-0.8/lib/zip_error_to_str.c	2008-04-22 23:14:12.140625000 +0900
+@@ -40,6 +40,10 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef _WIN32
++#define snprintf _snprintf
++#endif
++
+ #include "zip.h"
+ #include "zipint.h"
+ 
+diff -ru libzip-0.8.orig/lib/zip_name_locate.c libzip-0.8/lib/zip_name_locate.c
+--- libzip-0.8.orig/lib/zip_name_locate.c	2007-06-05 00:21:21.000000000 +0900
++++ libzip-0.8/lib/zip_name_locate.c	2008-04-22 23:14:12.156250000 +0900
+@@ -37,6 +37,10 @@
+ 
+ #include <string.h>
+ 
++#ifdef _WIN32
++#define strcasecmp _stricmp
++#endif
++
+ #include "zip.h"
+ #include "zipint.h"
+ 
+diff -ru libzip-0.8.orig/lib/zipint.h libzip-0.8/lib/zipint.h
+--- libzip-0.8.orig/lib/zipint.h	2007-06-05 00:21:21.000000000 +0900
++++ libzip-0.8/lib/zipint.h	2008-04-22 23:14:12.156250000 +0900
+@@ -39,7 +39,9 @@
+ #include <zlib.h>
+ 
+ #include "zip.h"
++#ifndef _WIN32
+ #include "config.h"
++#endif
+ 
+ #ifndef HAVE_MKSTEMP
+ int _zip_mkstemp(char *);

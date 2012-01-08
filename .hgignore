@@ -1,0 +1,8 @@
+syntax: glob
+Debug*
+Release*
+**/Debug*
+**/Release*
+*.ncb
+*.suo
+**/*.vcproj.*
