@@ -25,7 +25,7 @@ https://rubyforge.org/frs/?group_id=6124
 
     require 'zipruby'
     
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       n = ar.num_files # number of entries
     
       n.times do |i|
@@ -41,7 +41,7 @@ https://rubyforge.org/frs/?group_id=6124
         end
       end
     
-      # Zip::Archive includes Enumerable
+      # ZipRuby::Archive includes Enumerable
       entry_names = ar.map do |f|
         f.name
       end
@@ -50,7 +50,7 @@ https://rubyforge.org/frs/?group_id=6124
     # read huge entry
     BUFSIZE = 8192
     
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       ar.each do |f|
         buf = ''
     
@@ -70,9 +70,9 @@ https://rubyforge.org/frs/?group_id=6124
     
     bar_txt =  open('bar.txt')
     
-    Zip::Archive.open('filename.zip', Zip::CREATE) do |ar|
-      # if overwrite: ..., Zip::CREATE | Zip::TRUNC) do |ar|
-      # specifies compression level: ..., Zip::CREATE, Zip::BEST_SPEED) do |ar|
+    ZipRuby::Archive.open('filename.zip', ZipRuby::CREATE) do |ar|
+      # if overwrite: ..., ZipRuby::CREATE | ZipRuby::TRUNC) do |ar|
+      # specifies compression level: ..., ZipRuby::CREATE, ZipRuby::BEST_SPEED) do |ar|
     
         ar.add_file('foo.txt') # add file to zip archive
     
@@ -86,7 +86,7 @@ https://rubyforge.org/frs/?group_id=6124
     bar_txt.rewind
     
     # include directory in zip archive
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       ar.add_dir('dirname')
       ar.add_file('dirname/foo.txt', 'foo.txt')
           # args: <entry name>     ,  <source>
@@ -103,7 +103,7 @@ https://rubyforge.org/frs/?group_id=6124
     # add huge file
     source = %w(London Bridge is falling down)
     
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       # lb.txt => 'LondonBridgeisfallingdown'
       ar.add('lb.txt') do # add(<filename>, <mtime>)
         source.shift # end of stream is nil
@@ -116,7 +116,7 @@ https://rubyforge.org/frs/?group_id=6124
     
     bar_txt = open('bar.txt')
     
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       # replace file in zip archive
       ar.replace_file(0, 'foo.txt')
     
@@ -131,14 +131,14 @@ https://rubyforge.org/frs/?group_id=6124
       # or
       # ar.replace_buffer('entry name', 'Hello, world!')
       # if ignore case distinctions 
-      # ar.replace_buffer('entry name', 'Hello, world!', Zip::FL_NOCASE)
+      # ar.replace_buffer('entry name', 'Hello, world!', ZipRuby::FL_NOCASE)
       
       # add or replace file in zip archive
       ar.add_or_replace_file('zoo.txt', 'foo.txt')
     end
     
     # append comment    
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       ar.comment = <<-EOS
         jugem jugem gokou no surikere
         kaijari suigyo no
@@ -149,8 +149,8 @@ https://rubyforge.org/frs/?group_id=6124
     bar_txt.close # close file after archive closed
     
     # ar1 import ar2 entries
-    Zip::Archive.open('ar1.zip') do |ar1|
-      Zip::Archive.open('ar2.zip') do |ar2|
+    ZipRuby::Archive.open('ar1.zip') do |ar1|
+      ZipRuby::Archive.open('ar2.zip') do |ar2|
         ar1.update(ar2)
       end
     end
@@ -160,16 +160,16 @@ https://rubyforge.org/frs/?group_id=6124
     require 'zipruby'
     
     # encrypt
-    Zip::Archive.encrypt('filename.zip', 'password') # return true if encrypted
+    ZipRuby::Archive.encrypt('filename.zip', 'password') # return true if encrypted
     # or
-    # Zip::Archive.open('filename.zip') do |ar|
+    # ZipRuby::Archive.open('filename.zip') do |ar|
     #   ar.encrypt('password')
     # end
     
     # decrypt
-    Zip::Archive.decrypt('filename.zip', 'password') # return true if decrypted
+    ZipRuby::Archive.decrypt('filename.zip', 'password') # return true if decrypted
     # or
-    # Zip::Archive.open('filename.zip') do |ar|
+    # ZipRuby::Archive.open('filename.zip') do |ar|
     #   ar.decrypt('password')
     # end
 
@@ -181,15 +181,15 @@ https://rubyforge.org/frs/?group_id=6124
     
     buf = ''
     
-    Zip::Archive.open_buffer(buf, Zip::CREATE) do |ar|
+    ZipRuby::Archive.open_buffer(buf, ZipRuby::CREATE) do |ar|
       ar.add_buffer('bar.txt', 'zoo');
     end
 
-    buf2 = Zip::Archive.open_buffer(Zip::CREATE) do |ar|
+    buf2 = ZipRuby::Archive.open_buffer(ZipRuby::CREATE) do |ar|
       ar.add_buffer('bar.txt', 'zoo');
     end
     
-    Zip::Archive.open_buffer(buf) do |ar|
+    ZipRuby::Archive.open_buffer(buf) do |ar|
       ar.each do |f|
         puts f.name
       end
@@ -203,12 +203,12 @@ https://rubyforge.org/frs/?group_id=6124
     
     stream = lambda { return zip_data.slice!(0, 256) }
     
-    Zip::Archive.open_buffer(stream) do |ar|
+    ZipRuby::Archive.open_buffer(stream) do |ar|
       puts ar.num_files
     end
     
     # output huge zip data to stdout
-    Zip::Archive.open_buffer(zip_data) do |ar|
+    ZipRuby::Archive.open_buffer(zip_data) do |ar|
       ar.read do |chunk|
         print chunk
       end
@@ -218,7 +218,7 @@ https://rubyforge.org/frs/?group_id=6124
 
     require 'zipruby'
     
-    Zip::Archive.open('filename.zip', Zip::CREATE) do |ar|
+    ZipRuby::Archive.open('filename.zip', ZipRuby::CREATE) do |ar|
       ar.add_dir('dir')
     
       Dir.glob('dir/**/*').each do |path|
@@ -235,7 +235,7 @@ https://rubyforge.org/frs/?group_id=6124
     require 'zipruby'
     require 'fileutils'
     
-    Zip::Archive.open('filename.zip') do |ar|
+    ZipRuby::Archive.open('filename.zip') do |ar|
       ar.each do |zf|
         if zf.directory?
           FileUtils.mkdir_p(zf.name)

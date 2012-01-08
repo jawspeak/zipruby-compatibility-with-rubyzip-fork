@@ -16,7 +16,7 @@ void Init_zipruby_file();
 
 #define Check_File(p) do { \
   if ((p)->archive == NULL || (p)->file == NULL || (p)->sb == NULL) { \
-    rb_raise(rb_eRuntimeError, "invalid Zip::File"); \
+    rb_raise(rb_eRuntimeError, "invalid ZipRuby::File"); \
   } \
 } while(0)
 

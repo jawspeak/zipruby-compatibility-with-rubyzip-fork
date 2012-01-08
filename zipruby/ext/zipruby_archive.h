@@ -17,7 +17,7 @@ void Init_zipruby_archive();
 
 #define Check_Archive(p) do { \
   if ((p)->archive == NULL || NIL_P((p)->path)) { \
-    rb_raise(rb_eRuntimeError, "invalid Zip::Archive"); \
+    rb_raise(rb_eRuntimeError, "invalid ZipRuby::Archive"); \
   } \
 } while(0)
 

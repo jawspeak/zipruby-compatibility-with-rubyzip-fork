@@ -1,3 +1,5 @@
+# @jaw 2012-01-08 not tested in this fork
+
 Gem::Specification.new do |spec|
   spec.name              = 'zipruby'
   spec.version           = '0.3.6'

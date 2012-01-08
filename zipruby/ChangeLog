@@ -1,3 +1,6 @@
+2012-01-08 jawspeak
+   * Altered api to be compatible with projects using rubyzip and zipruby. Zip::* is now ZipRuby::*
+
 2010-01-23 winebarrel
 
    * fixes bug: [ruby-dev:40120] SEGV on zipruby with irb

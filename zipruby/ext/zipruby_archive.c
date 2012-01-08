@@ -972,7 +972,7 @@ static VALUE zipruby_archive_update(int argc, VALUE *argv, VALUE self) {
   rb_scan_args(argc, argv, "11", &srcarchive, &flags);
 
   if (!rb_obj_is_instance_of(srcarchive, Archive)) {
-    rb_raise(rb_eTypeError, "wrong argument type %s (expected Zip::Archive)", rb_class2name(CLASS_OF(srcarchive)));
+    rb_raise(rb_eTypeError, "wrong argument type %s (expected ZipRuby::Archive)", rb_class2name(CLASS_OF(srcarchive)));
   }
 
   if (!NIL_P(flags)) {
@@ -1440,7 +1440,7 @@ static VALUE zipruby_archive_read(VALUE self) {
   Data_Get_Struct(self, struct zipruby_archive, p_archive);
 
   if (NIL_P(p_archive->path)) {
-    rb_raise(rb_eRuntimeError, "invalid Zip::Archive");
+    rb_raise(rb_eRuntimeError, "invalid ZipRuby::Archive");
   }
 
 #ifdef _WIN32

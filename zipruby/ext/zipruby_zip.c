@@ -8,7 +8,7 @@
 VALUE Zip;
 
 void Init_zipruby_zip() {
-  Zip = rb_define_module("Zip");
+  Zip = rb_define_module("ZipRuby");
   rb_define_const(Zip, "VERSION", rb_str_new2(VERSION));
 
   rb_define_const(Zip, "CREATE",    INT2NUM(ZIP_CREATE));

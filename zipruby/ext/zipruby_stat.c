@@ -55,7 +55,7 @@ static VALUE zipruby_stat_initialize(int argc, VALUE *argv, VALUE self) {
   rb_scan_args(argc, argv, "21", &archive, &index, &flags);
 
   if (!rb_obj_is_instance_of(archive, Archive)) {
-    rb_raise(rb_eTypeError, "wrong argument type %s (expected Zip::Archive)", rb_class2name(CLASS_OF(archive)));
+    rb_raise(rb_eTypeError, "wrong argument type %s (expected ZipRuby::Archive)", rb_class2name(CLASS_OF(archive)));
   }
 
   switch (TYPE(index)) {
