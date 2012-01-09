@@ -19,6 +19,7 @@ if [ "$1" == 'release_cleanup' ]; then
   done
   cd ../zipruby
   rm zipruby.c
+  rmdir work/
   exit 0
 fi
 
