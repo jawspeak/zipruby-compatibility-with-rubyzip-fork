@@ -1,3 +1,11 @@
+## Usage
+Use bundle to depend on it with:
+`gem "zipruby-compat", :require => 'zipruby', :git => "git@github.com:jawspeak/zipruby-compatibility-with-rubyzip-fork.git", :tag => "v0.3.7"`
+
+Example project using it:
+https://github.com/jawspeak/ruby-docx-templater
+
+
 ## Why fork zipruby?
 * Both rubyzip http://rubygems.org/gems/rubyzip and zipruby http://rubygems.org/gems/zipruby define Zip::File
 * I didn't want to touch anything using rubyzip, but allow both libraries to coexist peacefully. 
